@@ -107,9 +107,8 @@ function showResult(location, weather) {
     `${weather.wind_speed_10m} m/s, ${windDirectionLabel(weather.wind_direction_10m)} (${weather.wind_direction_10m}°)`;
   document.getElementById('weather-precip').textContent = `${weather.precipitation} mm`;
 
-  updateMap(location, weather);
-
   resultEl.hidden = false;
+  updateMap(location, weather);
 }
 
 function updateMap(location, weather) {
