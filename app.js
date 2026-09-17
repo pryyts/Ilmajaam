@@ -1,5 +1,6 @@
 const GEOCODER_URL = 'https://aks.geoportaal.ee/inaks-geocoder-api/api/plain';
 const WEATHER_URL = 'https://api.open-meteo.com/v1/forecast';
+const LAST_ADDRESS_KEY = 'ilmajaam.lastAddress';
 
 const form = document.getElementById('search-form');
 const input = document.getElementById('address');
@@ -10,9 +11,20 @@ const resultEl = document.getElementById('result');
 let map = null;
 let marker = null;
 
-form.addEventListener('submit', async (event) => {
+form.addEventListener('submit', (event) => {
   event.preventDefault();
-  const address = input.value.trim();
+  search(input.value.trim());
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  const lastAddress = localStorage.getItem(LAST_ADDRESS_KEY);
+  if (lastAddress) {
+    input.value = lastAddress;
+    search(lastAddress);
+  }
+});
+
+async function search(address) {
   if (!address) return;
 
   setLoading(true);
@@ -28,12 +40,17 @@ form.addEventListener('submit', async (event) => {
     const weather = await getWeather(location.lat, location.lon);
     showResult(location, weather);
     showStatus('');
+    try {
+      localStorage.setItem(LAST_ADDRESS_KEY, address);
+    } catch {
+      // ignore storage errors (private mode, quota, etc.)
+    }
   } catch (err) {
     showStatus('Päring ebaõnnestus: ' + err.message);
   } finally {
     setLoading(false);
   }
-});
+}
 
 async function geocode(address) {
   const response = await fetch(GEOCODER_URL, {
