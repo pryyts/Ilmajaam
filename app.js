@@ -102,10 +102,6 @@ function showStatus(message) {
 
 function showResult(location, weather) {
   document.getElementById('result-address').textContent = location.address;
-  document.getElementById('weather-temp').textContent = `${weather.temperature_2m} °C`;
-  document.getElementById('weather-wind').textContent =
-    `${weather.wind_speed_10m} m/s, ${windDirectionLabel(weather.wind_direction_10m)} (${weather.wind_direction_10m}°)`;
-  document.getElementById('weather-precip').textContent = `${weather.precipitation} mm`;
 
   resultEl.hidden = false;
   updateMap(location, weather);

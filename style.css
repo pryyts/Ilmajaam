@@ -1,4 +1,150 @@
+:root {
+  --navy-900: #0B1B33;
+  --navy-700: #16305A;
+  --navy-500: #2C4A7C;
+  --gray-700: #4A5261;
+  --gray-500: #6B7480;
+  --gray-300: #C6CBD3;
+  --gray-100: #EFF1F4;
+  --bg:       #F6F7FA;
+  --white:    #FFFFFF;
+  --accent:      #17A9E0;
+  --accent-dark: #0F87B8;
+  --accent-tint: #DDF1FA;
+  --err: #C0392B;
+
+  --font-display: "Archivo", sans-serif;
+  --font-body:    "IBM Plex Sans", sans-serif;
+  --font-mono:    "IBM Plex Mono", monospace;
+
+  --radius: 0px;
+  --unit:   8px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--gray-700);
+  font-family: var(--font-body);
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--navy-900);
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+
+.lead {
+  margin: 0 0 24px;
+  color: var(--gray-500);
+}
+
+.search-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+#address {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 15px;
+  background: var(--white);
+  color: var(--gray-700);
+}
+
+#address:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+#search-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#search-btn:hover { background: var(--accent-dark); }
+#search-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.status {
+  min-height: 20px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--err);
+}
+
+.result h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--navy-900);
+  margin: 0 0 16px;
+}
+
 #map {
   height: 400px;
   width: 100%;
+  border: 1px solid var(--gray-300);
+}
+
+.leaflet-popup-content {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--navy-900);
+}
+
+.leaflet-popup-content ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 24px 16px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
+  .search-form {
+    flex-direction: column;
+  }
+
+  #search-btn {
+    width: 100%;
+  }
+
+  #map {
+    height: 320px;
+  }
 }

@@ -4,29 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ilmajaam</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main>
+<main class="page">
   <h1>Ilmajaam</h1>
-  <p>Sisesta Eesti aadress ja saad selle koha praeguse ilma.</p>
+  <p class="lead">Sisesta Eesti aadress ja saad selle koha praeguse ilma.</p>
 
-  <form id="search-form">
-    <label for="address">Aadress</label>
+  <form id="search-form" class="search-form">
+    <label for="address" class="visually-hidden">Aadress</label>
     <input type="text" id="address" name="address" placeholder="Nt Tartu mnt 1, Tallinn" autocomplete="off" required>
     <button type="submit" id="search-btn">Otsi</button>
   </form>
 
-  <div id="status" role="status" aria-live="polite"></div>
+  <div id="status" class="status" role="status" aria-live="polite"></div>
 
-  <section id="result" hidden>
+  <section id="result" class="result" hidden>
     <h2 id="result-address"></h2>
-    <ul id="weather-info">
-      <li>Temperatuur: <span id="weather-temp"></span></li>
-      <li>Tuul: <span id="weather-wind"></span></li>
-      <li>Sademed: <span id="weather-precip"></span></li>
-    </ul>
     <div id="map"></div>
   </section>
 </main>
