@@ -1,6 +1,12 @@
 const GEOCODER_URL = 'https://aks.geoportaal.ee/inaks-geocoder-api/api/plain';
 const WEATHER_URL = 'https://api.open-meteo.com/v1/forecast';
+const QUOTES_URL = 'konfutsiuse_mottetera.json';
 const LAST_ADDRESS_KEY = 'ilmajaam.lastAddress';
+
+const quotesPromise = fetch(QUOTES_URL)
+  .then((res) => res.json())
+  .then((data) => data.quotes)
+  .catch(() => []);
 
 const form = document.getElementById('search-form');
 const input = document.getElementById('address');
@@ -38,7 +44,8 @@ async function search(address) {
     }
 
     const weather = await getWeather(location.lat, location.lon);
-    showResult(location, weather);
+    const quote = await getRandomQuote();
+    showResult(location, weather, quote);
     showStatus('');
     try {
       localStorage.setItem(LAST_ADDRESS_KEY, address);
@@ -100,14 +107,20 @@ function showStatus(message) {
   statusEl.textContent = message;
 }
 
-function showResult(location, weather) {
+function showResult(location, weather, quote) {
   document.getElementById('result-address').textContent = location.address;
 
   resultEl.hidden = false;
-  updateMap(location, weather);
+  updateMap(location, weather, quote);
 }
 
-function updateMap(location, weather) {
+async function getRandomQuote() {
+  const quotes = await quotesPromise;
+  if (!quotes || quotes.length === 0) return null;
+  return quotes[Math.floor(Math.random() * quotes.length)].text;
+}
+
+function updateMap(location, weather, quote) {
   if (!map) {
     map = L.map('map').setView([location.lat, location.lon], 15);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -121,18 +134,25 @@ function updateMap(location, weather) {
     marker.remove();
   }
   marker = L.marker([location.lat, location.lon]).addTo(map);
-  marker.bindPopup(popupContent(weather)).openPopup();
+  marker.bindPopup(popupContent(weather, quote)).openPopup();
 
   // Leaflet needs a size recalculation when its container was hidden during init.
   setTimeout(() => map.invalidateSize(), 0);
 }
 
-function popupContent(weather) {
-  return `<ul>
+function popupContent(weather, quote) {
+  const quoteHtml = quote ? `<p class="popup-quote">"${escapeHtml(quote)}"</p>` : '';
+  return `${quoteHtml}<ul>
     <li>Temperatuur: ${weather.temperature_2m} °C</li>
     <li>Tuul: ${weather.wind_speed_10m} m/s, ${windDirectionLabel(weather.wind_direction_10m)} (${weather.wind_direction_10m}°)</li>
     <li>Sademed: ${weather.precipitation} mm</li>
   </ul>`;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 function windDirectionLabel(degrees) {
