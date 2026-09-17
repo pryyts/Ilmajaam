@@ -90,12 +90,12 @@ function showResult(location, weather) {
     `${weather.wind_speed_10m} m/s, ${windDirectionLabel(weather.wind_direction_10m)} (${weather.wind_direction_10m}°)`;
   document.getElementById('weather-precip').textContent = `${weather.precipitation} mm`;
 
-  updateMap(location);
+  updateMap(location, weather);
 
   resultEl.hidden = false;
 }
 
-function updateMap(location) {
+function updateMap(location, weather) {
   if (!map) {
     map = L.map('map').setView([location.lat, location.lon], 15);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -109,10 +109,18 @@ function updateMap(location) {
     marker.remove();
   }
   marker = L.marker([location.lat, location.lon]).addTo(map);
-  marker.bindPopup(location.address).openPopup();
+  marker.bindPopup(popupContent(weather)).openPopup();
 
   // Leaflet needs a size recalculation when its container was hidden during init.
   setTimeout(() => map.invalidateSize(), 0);
+}
+
+function popupContent(weather) {
+  return `<ul>
+    <li>Temperatuur: ${weather.temperature_2m} °C</li>
+    <li>Tuul: ${weather.wind_speed_10m} m/s, ${windDirectionLabel(weather.wind_direction_10m)} (${weather.wind_direction_10m}°)</li>
+    <li>Sademed: ${weather.precipitation} mm</li>
+  </ul>`;
 }
 
 function windDirectionLabel(degrees) {
